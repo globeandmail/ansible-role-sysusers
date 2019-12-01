@@ -1,7 +1,6 @@
 # ansible-role-sysusers
-=======================
 
-This role will manage users on the target host(s), including SSH authorized_keys.
+This role manages users on the target host(s), including SSH authorized_keys.
 
 
 Role Variables
@@ -12,8 +11,8 @@ sysusers
 This role has the same behaviour as the Ansible 'user' module, with the addition of the 'authorized' property which utilizes the 'authorized_key' module (see example).
 
 For reference,
-  http://docs.ansible.com/user_module.html
-  http://docs.ansible.com/authorized_key_module.html
+   http://docs.ansible.com/user_module.html
+   http://docs.ansible.com/authorized_key_module.html
 
 
 Example Playbook
@@ -30,9 +29,9 @@ Example play including this role:
 
 Defining Variables:
 
-  group_vars/dev-web.yml
+  group_vars/dev-all.yml
 
-		sysusers:
+   sysusers:
     - name: userone
     - name: usertwo
       uid: 1234
@@ -48,6 +47,6 @@ Defining Variables:
 
 ##### To generate the encrypted password for the user, use 'mkpasswd'. On Ubuntu, the utility is in the 'whois' package.
 
-  mkpasswd --method=SHA-512
+   mkpasswd --method=SHA-512
 
   (See http://docs.ansible.com/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module)
