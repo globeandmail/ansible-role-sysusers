@@ -31,18 +31,18 @@ Defining Variables:
 
   group_vars/dev-all.yml
 
-   sysusers:
-    - name: userone
-    - name: usertwo
-      uid: 1234
-      group: usertwo
-      groups:
-      - www-data
-      - mysql
-      shell: '/bin/bash'
-      password: '$6$xtQrZzV5jWd0arrz$5vqjD0Qsfylh0P4CB/Fe68Zcrxqj7QPLQgL6MNES1x/Wp8waCA3deQzzGRyvOzXtDh6ctQwNiHz90QF/dh9UM0'
-      authorized:
-      - key: 'ssh-rsa DEF456 keycmt'
+    sysusers:
+     - name: userone
+     - name: usertwo
+       uid: 1234
+       group: usertwo
+       groups:
+       - www-data
+       - mysql
+       shell: '/bin/bash'
+       password: '$6$xtQrZzV5jWd0arrz$5vqjD0Qsfylh0P4CB/Fe68Zcrxqj7QPLQgL6MNES1x/Wp8waCA3deQzzGRyvOzXtDh6ctQwNiHz90QF/dh9UM0'
+       authorized:
+       - key: 'ssh-rsa DEF456 keycmt'
 
 
 ##### To generate the encrypted password for the user, use 'mkpasswd'. On Ubuntu, the utility is in the 'whois' package.
