@@ -1,0 +1,57 @@
+---
+- name: "Manage User: {{item.name}}"
+  user:
+   append: '{{ item.append |default(omit)}}'
+   comment: '{{ item.comment |default(omit)}}'
+   createhome: '{{ item.createhome |default(omit)}}'
+   force: '{{ item.force |default(omit)}}'
+   generate_ssh_key: '{{ item.generate_ssh_key |default(omit)}}'
+   group: '{{ item.group |default(omit)}}'
+   groups: '{{ item.groups |default(omit)}}'
+   home: '{{ item.home |default(omit)}}'
+   login_class: '{{ item.login_class |default(omit)}}'
+   move_home: '{{ item.move_home |default(omit)}}'
+   name: '{{ item.name |mandatory}}'
+   non_unique: '{{ item.non_unique |default(omit)}}'
+   password: '{{ item.password |default(omit)}}'
+   remove: '{{ item.remove |default(omit)}}'
+   shell: '{{ item.shell |default(omit)}}'
+   ssh_key_bits: '{{ item.ssh_key_bits |default("2048")}}'
+   ssh_key_comment: '{{ item.ssh_key_comment |default("ansible-generated")}}'
+   ssh_key_file: '{{ item.ssh_key_file |default(".ssh/id_rsa")}}'
+   ssh_key_passphrase: '{{ item.ssh_key_passphrase |default(omit)}}'
+   ssh_key_type: '{{ item.ssh_key_type |default("rsa")}}'
+   state: '{{ item.state |default("present")}}'
+   system: '{{ item.system |default(omit)}}'
+   uid: '{{ item.uid |default(omit)}}'
+   update_password: '{{ item.update_password |default("always")}}'
+  loop: "{{ sysusers | default([]) }}"
+
+- name: Create user subdirectories
+  include: "create_user_subdirs.yml"
+  loop: "{{ sysusers|default([]) }}"
+  loop_control:
+   loop_var: "user"
+
+- name: Ensure ~/.ssh exists
+  file:
+    path: "~{{item.name}}/.ssh"
+    state: "directory"
+    mode: "0700"
+    owner: "{{item.name}}"
+    group: "{{ item.group | default(item.name) }}"
+  loop: "{{ sysusers | default([]) }}"
+
+- name: Manage SSH authorized keys
+  authorized_key:
+   key: '{{ item.1.key }}'
+   key_options: '{{ item.1.key_options | default(omit) }}'
+   manage_dir: '{{ item.1.manage_dir | default("yes") }}'
+   path: '{{ item.1.path | default(omit) }}'
+   state: '{{ item.1.state | default("present") }}'
+   user: '{{ item.0.name }}'
+  with_subelements:
+   - "{{ sysusers|default([]) }}"
+   - authorized
+   - { skip_missing: True }
+  ignore_errors: "{{ ansible_check_mode }}"

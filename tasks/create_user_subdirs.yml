@@ -1,0 +1,8 @@
+---
+- name: Create user subdirs...
+  file:
+    path: "~{{user.name}}/{{item}}"
+    state: "directory"
+    owner: "{{user.name}}"
+    group: "{{user.group|default(user.name)}}"
+  loop: "{{user.directories|default([])}}"
